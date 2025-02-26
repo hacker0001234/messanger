@@ -38,5 +38,10 @@ public class FriendController {
         }
             return "redirect:/error_friend";
     }
+  @GetMapping("/error_friend")
+    public String errorFriend()
+    {
+        return "error_friend";
+    }
 
 }

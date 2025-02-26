@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Профіль</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .profile-container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #7f8c8d;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+            flex: 1;
+            max-width: 200px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="profile-container">
+    <h1>Ваш профіль</h1>
+    <img th:src="${userPicture}" alt="Аватар користувача" class="profile-pic"/>
+    <p>Електронна пошта: <span th:text="${userEmail}"></span></p>
+    <p>придумай імя від 5 до 20 англійських букв</p>
+
+    <!-- Додаємо форму для введення тексту -->
+    <form th:action="@{/profile/add}" method="post" onsubmit="return validateForm()">
+        <div class="input-group">
+            <input type="text" name="name" id="nameInput" placeholder="Введіть текст" required/>
+            <button type="submit">Add</button>
+        </div>
+    </form>
+    <p class="error-message" id="errorMessage">Таке імя зайнято аюо не правильне</p>
+</div>
+
+<script th:inline="javascript">
+    function isEnglishWord(word) {
+        // Перевіряємо, чи слово складається лише з англійських літер
+        return /^[a-zA-Z]+$/.test(word);
+    }
+
+    function isValidLength(word) {
+        // Перевіряємо, чи довжина слова від 5 до 20 символів
+        return word.length >= 5 && word.length <= 20;
+    }
+
+    function hasNoNumbers(word) {
+        // Перевіряємо, чи немає цифр у слові
+        return !/\d/.test(word);
+    }
+
+    function validateForm() {
+        const name = document.getElementById('nameInput').value.trim();
+        const errorMessage = document.getElementById('errorMessage');
+
+        if (name === '') {
+            errorMessage.style.display = 'block';
+            document.getElementById('nameInput').value = ''; // Очищаємо поле
+            return false; // Зупиняємо відправлення форми
+        }
+
+        if (!isEnglishWord(name) || !isValidLength(name) || !hasNoNumbers(name)) {
+            errorMessage.style.display = 'block';
+            document.getElementById('nameInput').value = ''; // Очищаємо поле
+            return false; // Зупиняємо відправлення форми
+        }
+
+        errorMessage.style.display = 'none';
+        return true; // Дозволяємо відправлення форми
+    }
+</script>
+</body>
+</html>

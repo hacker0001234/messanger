@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Чат із другом</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5; /* Світло-сірий фон */
+        }
+        .chat-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #000; /* Чорна рамка, як на макеті */
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd; /* Сірий аватар, як на макеті */
+            margin-right: 10px;
+        }
+        .friend-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff; /* Синій колір імені друга, як на макеті */
+            flex-grow: 1;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto; /* Прокручування повідомлень */
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+        .message.mine {
+            background-color: #e3f2fd; /* Світло-блакитний для повідомлень поточного користувача */
+            margin-left: auto;
+            color: #2c3e50;
+        }
+        .message.friend {
+            background-color: #f5f5f5; /* Світло-сірий для повідомлень друга */
+            margin-right: auto;
+            color: #2c3e50;
+        }
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        .message-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .send-btn {
+            background-color: #007bff; /* Синій колір кнопки "Надіслати" */
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .send-btn:hover {
+            background-color: #0056b3;
+        }
+        .back-btn {
+            background-color: #e74c3c; /* Червона кнопка "Назад", як на попередніх шаблонах */
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .back-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="avatar"></div> <!-- Сірий круг для аватара друга -->
+        <span class="friend-name" th:text="${friendName}"></span>
+    </div>
+
+    <div class="chat-messages">
+        <div th:each="message : ${messages}" th:classappend="${message.messageOwner == myName ? 'message mine' : 'message friend'}" th:text="${message.messageOwner} + ': ' + ${message.message}"></div>
+    </div>
+
+    <form th:action="@{'/friend/' + ${friendName} + '/message'}" method="post" class="chat-input" onsubmit="clearInput(event)">
+        <input type="text" class="message-input" name="message" id="messageInput" placeholder="Введіть повідомлення..."/>
+        <button type="submit" class="send-btn">Надіслати</button>
+    </form>
+
+    <button class="back-btn" onclick="window.location.href='/messenger'">Назад до меню</button>
+</div>
+
+<script>
+    function clearInput(event) {
+        event.preventDefault(); // Забороняємо стандартну поведінку форми (перевантаження сторінки)
+        const form = event.target;
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+
+        if (message) {
+            // Відправляємо форму програмно
+            form.submit();
+            // Очищаємо поле вводу
+            input.value = '';
+        }
+    }
+</script>
+</body>
+</html>

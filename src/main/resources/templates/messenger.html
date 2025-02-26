@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Меню Месенджера</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5; /* Світло-сірий фон, як на макеті */
+        }
+        .messenger-menu-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+            border: 2px solid #000; /* Чорна рамка для контейнера, як на макеті */
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd; /* Сірий аватар, як на макеті */
+            margin-right: 10px;
+        }
+        .nickname {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff; /* Синій колір нікнейму, як на макеті */
+            flex-grow: 1;
+        }
+        .add-friend-btn {
+            background-color: #007bff; /* Синій колір кнопки, як на макеті */
+            color: white;
+            padding: 6px 12px; /* Зменшено padding для меншого розміру */
+            border: none;
+            border-radius: 5px;
+            font-size: 14px; /* Зменшено розмір шрифту */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+            width: 120px; /* Зменшено ширину кнопки */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .add-friend-btn:hover {
+            background-color: #0056b3; /* Темніший синій при наведенні */
+        }
+        .friends-list {
+            border: 2px solid #000; /* Чорна рамка для списку друзів, як на макеті */
+            padding: 10px;
+            margin-bottom: 20px;
+            max-height: 100px; /* Обмеження висоти для прокручування */
+            overflow-y: auto; /* Додаємо вертикальне прокручування для ручного управління */
+            scrollbar-width: thin; /* Тонка смуга прокручування для Firefox */
+            scrollbar-color: #888 #f0f2f5; /* Колір смуги прокручування для Firefox */
+        }
+        .friends-list::-webkit-scrollbar {
+            width: 8px; /* Ширина смуги прокручування для Chrome/Safari */
+        }
+        .friends-list::-webkit-scrollbar-thumb {
+            background-color: #888; /* Колір самої смуги прокручування */
+            border-radius: 10px; /* Закруглення смуги */
+            border: 2px solid #f0f2f5; /* Відступ від країв */
+        }
+        .friend-item {
+            padding: 10px;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd; /* Сіра лінія між пунктами, як на макеті */
+            cursor: pointer;
+        }
+        .friend-item a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        .friend-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="messenger-menu-container">
+    <div class="header">
+        <div style="display: flex; align-items: center;">
+            <div class="avatar"></div> <!-- Сірий круг для аватара -->
+            <span class="nickname" th:text="${name}"></span>
+        </div>
+    </div>
+
+    <a href="/addfriend" class="add-friend-btn">Додати друга</a>
+
+    <div class="friends-list">
+        <div th:each="friend : ${friends}" class="friend-item">
+            <a th:href="'/friend/' + ${friend}" th:text="${friend}"></a>
+        </div>
+        <p th:if="${#lists.isEmpty(friends)}" style="color: #7f8c8d;">У вас ще немає друзів.</p>
+    </div>
+</div>
+</body>
+</html>
